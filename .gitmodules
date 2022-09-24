@@ -1,0 +1,3 @@
+[submodule "repos/dcardenascom-web"]
+	path = repos/dcardenascom-web
+	url = https://github.com/dcardenascom/dcardenascom-web.git
