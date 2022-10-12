@@ -1,0 +1,21 @@
+{
+  "url": "http://localhost:80",
+  "server": {
+    "port": 80,
+    "host": "::"
+  },
+  "mail": {
+    "transport": "Direct"
+  },
+  "logging": {
+    "transports": [
+    "file",
+    "stdout"
+    ]
+  },
+  "process": "systemd",
+  "paths": {
+    "contentPath": "/var/lib/ghost/content"
+  }
+}
+  

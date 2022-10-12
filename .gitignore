@@ -1,4 +1,5 @@
-data/Descargas/*
-data/Peliculas/*
-data/Series/*
-data/Musica/*
+plex/media/Descargas/*
+plex/media/Peliculas/*
+plex/media/Series/*
+plex/media/Musica/*
+.env

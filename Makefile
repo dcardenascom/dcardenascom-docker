@@ -55,3 +55,5 @@ update:
 	@$(INSTALL_NPM)
 	@$(STOP_DOCKER)
 	@$(START_DOCKER)
+renew:
+	docker compose run --rm dcardenascom-certbot renew

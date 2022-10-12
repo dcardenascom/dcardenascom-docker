@@ -3,13 +3,20 @@ services:
 
   dcardenascom-nginx:
     image: nginx:1.23.1-alpine
+    restart: unless-stopped
     depends_on:
       - dcardenascom-web
+      - dcardenascom-qbittorrent
+      - dcardenascom-plex
+      - dcardenascom-ghost
+      - dcardenascom-certbot
     ports:
-      - "80:80"
+      - 80:80
     volumes:
       - ./config/nginx:/etc/nginx/conf.d
       - dcardenascom-web:/var/www/dcardenascom-web
+      - dcardenascom-certbot-www:/var/www/certbot/:ro
+      - dcardenascom-certbot-conf:/etc/nginx/ssl/:ro
     container_name: dcardenascom-nginx
     logging:
       options:
@@ -19,14 +26,30 @@ services:
         aliases:
           - dcardenascom-nginx
 
+  dcardenascom-certbot:
+    image: certbot/certbot:latest
+    restart: unless-stopped
+    volumes:
+      - dcardenascom-certbot-www:/var/www/certbot/:rw
+      - dcardenascom-certbot-conf:/etc/letsencrypt/:rw
+    container_name: dcardenascom-certbot
+    logging:
+      options:
+        max-size: 50m
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-certbot
+
   dcardenascom-web:
     image: node:16-alpine3.15
+    restart: unless-stopped
     volumes:
       - ./repos/dcardenascom-web/.:/home/node/app
       - dcardenascom-web:/home/node/app/dist
     container_name: dcardenascom-web
     working_dir: /home/node/app
-    command: sh -c "export NODE_OPTIONS=--openssl-legacy-provider && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main ca-certificates && apk update && apk add python3 make g++ && NODE_OPTIONS=--openssl-legacy-provider && make install && make start"
+    command: sh -c "apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main ca-certificates && apk update && apk add python3 make g++ && NODE_OPTIONS=--openssl-legacy-provider && make install && make start"
     logging:
       options:
         max-size: 50m
@@ -46,12 +69,70 @@ services:
     volumes:
       - dcardenascom-qbittorrent:/config
       - ./data:/downloads
-    ports:
-      - 80:80
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
     restart: unless-stopped
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-qbittorrent
+
+  dcardenascom-ghost:
+    image: ghost:alpine
+    restart: unless-stopped
+    container_name: dcardenascom-ghost
+    env_file:
+      - .env
+    environment:
+      database__client: mysql
+      database__connection__host: dcardenascom-mysql
+      database__connection__user: ${MYSQL_USER}
+      database__connection__password: ${MYSQL_PASSWORD}
+      database__connection__database: ghost
+      url: http://localhost:80
+    volumes:
+      - dcardenascom-ghost:/var/lib/ghost/content
+      - ./config/ghost/config.production.json:/var/lib/ghost/config.production.json:ro
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-ghost
+
+  dcardenascom-mysql:
+    image: mysql:latest
+    restart: unless-stopped
+    container_name: dcardenascom-mysql
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ghost
+    volumes:
+      - dcardenascom-mysql:/var/lib/mysql
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-mysql
+
+  dcardenascom-plex:
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    container_name: dcardenascom-plex
+    env_file:
+      - .env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - PLEX_CLAIM=${PLEX_CLAIM}
+    volumes:
+      - dcardenascom-plex-config:/config
+      - dcardenascom-plex-transcodes:/transcode
+      - ./plex/media:/media
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-plex
 
 networks:
   dcardenascom-network:
@@ -59,3 +140,9 @@ networks:
 volumes:
   dcardenascom-web:
   dcardenascom-qbittorrent:
+  dcardenascom-mysql:
+  dcardenascom-ghost:
+  dcardenascom-plex-config:
+  dcardenascom-plex-transcodes:
+  dcardenascom-certbot-www:
+  dcardenascom-certbot-conf:
