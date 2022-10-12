@@ -1,5 +1,5 @@
-plex/media/Descargas/*
-plex/media/Peliculas/*
-plex/media/Series/*
-plex/media/Musica/*
+# plex/media/Descargas/*
+# plex/media/Peliculas/*
+# plex/media/Series/*
+# plex/media/Musica/*
 .env
