@@ -62,6 +62,6 @@ update:
 	@$(STOP_DOCKER)
 	@$(START_DOCKER)
 getcert:
-	docker compose run --rm dcardenascom-certbot certonly --webroot --webroot-path /var/www/certbot/ -d dcardenas.com
+	docker compose run --rm dcardenascom-certbot certonly --webroot --webroot-path /var/www/certbot/ -d dcardenas.com falsoyzurdo.com
 renew:
 	docker compose run --rm dcardenascom-certbot renew
