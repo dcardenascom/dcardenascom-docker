@@ -59,7 +59,7 @@ services:
           - dcardenascom-qbittorrent
 
   dcardenascom-ghost:
-    image: ghost:alpine
+    image: ghost:5.52.3-alpine
     # restart: unless-stopped
     container_name: dcardenascom-ghost
     env_file:
