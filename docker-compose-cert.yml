@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  dcardenascom-nginx:
+    image: nginx:1.23.1-alpine
+    # restart: unless-stopped
+    depends_on:
+      - dcardenascom-web
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/cert:/etc/nginx/conf.d
+      - dcardenascom-web:/var/www/dcardenascom-web
+      - dcardenascom-certbot-www:/var/www/certbot/:ro
+      - dcardenascom-certbot-conf:/etc/nginx/ssl/:ro
+    container_name: dcardenascom-nginx
+    logging:
+      options:
+        max-size: 50m
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-nginx
+
+  dcardenascom-web:
+    image: node:16-alpine3.15
+    # restart: unless-stopped
+    volumes:
+      - ./repos/dcardenascom-web/.:/home/node/app
+      - dcardenascom-web:/home/node/app/dist
+    container_name: dcardenascom-web
+    working_dir: /home/node/app
+    command: sh -c "apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main ca-certificates && apk update && apk add python3 make g++ && NODE_OPTIONS=--openssl-legacy-provider && make install"
+    logging:
+      options:
+        max-size: 50m
+    networks:
+      dcardenascom-network:
+        aliases:
+          - dcardenascom-web
+
+networks:
+  dcardenascom-network:
+
+volumes:
+  dcardenascom-web:
+  dcardenascom-certbot-www:
+  dcardenascom-certbot-conf:
