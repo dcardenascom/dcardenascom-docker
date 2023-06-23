@@ -11,7 +11,7 @@ services:
       - dcardenascom-ghost
     ports:
       - 80:80
-      - 433:433
+      - 443:443
     volumes:
       - ./config/nginx/prod:/etc/nginx/conf.d
       - dcardenascom-web:/var/www/dcardenascom-web
