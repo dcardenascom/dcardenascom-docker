@@ -9,15 +9,12 @@ services:
       - dcardenascom-qbittorrent
       - dcardenascom-plex
       - dcardenascom-ghost
-      - dcardenascom-certbot
     ports:
       - 80:80
       - 433:433
     volumes:
       - ./config/nginx/prod:/etc/nginx/conf.d
       - dcardenascom-web:/var/www/dcardenascom-web
-      - dcardenascom-certbot-www:/var/www/certbot/:ro
-      - dcardenascom-certbot-conf:/etc/nginx/ssl/:ro
     container_name: dcardenascom-nginx
     logging:
       options:
@@ -26,21 +23,6 @@ services:
       dcardenascom-network:
         aliases:
           - dcardenascom-nginx
-
-  dcardenascom-certbot:
-    image: certbot/certbot:latest
-    # restart: unless-stopped
-    volumes:
-      - dcardenascom-certbot-www:/var/www/certbot/:rw
-      - dcardenascom-certbot-conf:/etc/letsencrypt/:rw
-    container_name: dcardenascom-certbot
-    logging:
-      options:
-        max-size: 50m
-    networks:
-      dcardenascom-network:
-        aliases:
-          - dcardenascom-certbot
 
   dcardenascom-web:
     image: node:16-alpine3.15
@@ -145,5 +127,3 @@ volumes:
   dcardenascom-ghost:
   dcardenascom-plex-config:
   dcardenascom-plex-transcodes:
-  dcardenascom-certbot-www:
-  dcardenascom-certbot-conf:
