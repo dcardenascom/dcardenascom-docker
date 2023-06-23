@@ -12,6 +12,7 @@ services:
       - dcardenascom-certbot
     ports:
       - 80:80
+      - 433:433
     volumes:
       - ./config/nginx/prod:/etc/nginx/conf.d
       - dcardenascom-web:/var/www/dcardenascom-web
