@@ -45,7 +45,7 @@ start:
 	$(START_DOCKER)
 dev:
 	$(START_DOCKER_DEV)
-cert:
+start-cert:
 	$(START_DOCKER_CERT)
 stop:
 	@$(STOP_DOCKER)
