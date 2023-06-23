@@ -17,6 +17,7 @@ TYPESCRIPT = npm install -g typescript ts-node nodemon
 
 # DOCKER
 START_DOCKER = docker compose up -d
+START_DOCKER_DEV = docker compose -f docker-compose-dev.yml up -d
 STOP_DOCKER = docker compose stop
 DOCKER_LOGS = docker compose logs -t -f --tail 10
 DOCKER_CLEAR = docker compose rm -fs
@@ -41,6 +42,8 @@ install:
 	@$(TYPESCRIPT)
 start:
 	$(START_DOCKER)
+dev:
+	$(START_DOCKER_DEV)
 stop:
 	@$(STOP_DOCKER)
 restart:

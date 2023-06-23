@@ -3,3 +3,4 @@ plex/media/Peliculas/*
 plex/media/Series/*
 plex/media/Musica/*
 .env
+data/*
