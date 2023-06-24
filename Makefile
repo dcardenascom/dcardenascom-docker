@@ -65,3 +65,5 @@ getcert:
 	docker compose run --rm dcardenascom-certbot certonly --webroot --webroot-path /var/www/certbot/ -d dcardenas.com falsoyzurdo.com
 renew:
 	docker compose run --rm dcardenascom-certbot renew
+load:
+	cp -rf /home/dcardenas/dcardenascom-docker/data/* /home/dcardenas/dcardenascom-docker/plex/media/Descargas/.
