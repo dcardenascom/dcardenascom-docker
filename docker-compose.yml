@@ -109,7 +109,6 @@ services:
       - PGID=1000
       - TZ=Europe/London
       - PLEX_CLAIM=${PLEX_CLAIM}
-    network_mode: host
     volumes:
       - dcardenascom-plex-config:/config
       - dcardenascom-plex-transcodes:/transcode
