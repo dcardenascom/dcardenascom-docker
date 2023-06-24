@@ -54,7 +54,6 @@ services:
       - ./config/qBittorrent/qBittorrent.conf:/config/qBittorrent/qBittorrent.conf
       - ./data:/downloads
     ports:
-      - 80:80
       - 6881:6881
       - 6881:6881/udp
     # restart: unless-stopped
