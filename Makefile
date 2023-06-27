@@ -66,4 +66,4 @@ getcert:
 renew:
 	docker compose run --rm dcardenascom-certbot renew
 load:
-	sudo mv /home/dcardenas/dcardenascom-docker/data/* /home/dcardenas/dcardenascom-docker/plex/media/Descargas/. && cd /home/dcardenas/dcardenascom-docker/plex/media/ && sudo cd chmod -R 777 Descargas
+	sudo su && mv /home/dcardenas/dcardenascom-docker/data/* /home/dcardenas/dcardenascom-docker/plex/media/Descargas/. && cd /home/dcardenas/dcardenascom-docker/plex/media/ && chmod -R 777 Descargas && exit
