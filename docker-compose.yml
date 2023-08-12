@@ -3,11 +3,8 @@ services:
 
   dcardenascom-nginx:
     image: nginx:1.23.1-alpine
-    # restart: unless-stopped
     depends_on:
       - dcardenascom-web
-      - dcardenascom-qbittorrent
-      - dcardenascom-plex
       - dcardenascom-ghost
     ports:
       - 80:80
@@ -26,7 +23,6 @@ services:
 
   dcardenascom-web:
     image: node:16-alpine3.15
-    # restart: unless-stopped
     volumes:
       - ./repos/dcardenascom-web/.:/home/node/app
       - dcardenascom-web:/home/node/app/dist
@@ -41,30 +37,8 @@ services:
         aliases:
           - dcardenascom-web
 
-  dcardenascom-qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: dcardenascom-qbittorrent
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - WEBUI_PORT=80
-    volumes:
-      - dcardenascom-qbittorrent:/config
-      - ./config/qBittorrent/qBittorrent.conf:/config/qBittorrent/qBittorrent.conf
-      - ./data:/downloads
-    ports:
-      - 6881:6881
-      - 6881:6881/udp
-    # restart: unless-stopped
-    networks:
-      dcardenascom-network:
-        aliases:
-          - dcardenascom-qbittorrent
-
   dcardenascom-ghost:
     image: ghost:5.52.3-alpine
-    # restart: unless-stopped
     container_name: dcardenascom-ghost
     env_file:
       - .env
@@ -85,7 +59,6 @@ services:
 
   dcardenascom-mysql:
     image: mysql:latest
-    # restart: unless-stopped
     container_name: dcardenascom-mysql
     env_file:
       - .env
@@ -101,33 +74,10 @@ services:
         aliases:
           - dcardenascom-mysql
 
-  dcardenascom-plex:
-    image: plexinc/pms-docker
-    # restart: unless-stopped
-    container_name: dcardenascom-plex
-    env_file:
-      - .env
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - PLEX_CLAIM=${PLEX_CLAIM}
-    volumes:
-      - dcardenascom-plex-config:/config
-      - dcardenascom-plex-transcodes:/transcode
-      - ./plex/media:/media
-    networks:
-      dcardenascom-network:
-        aliases:
-          - dcardenascom-plex
-
 networks:
   dcardenascom-network:
 
 volumes:
   dcardenascom-web:
-  dcardenascom-qbittorrent:
   dcardenascom-mysql:
   dcardenascom-ghost:
-  dcardenascom-plex-config:
-  dcardenascom-plex-transcodes:
