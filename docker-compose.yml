@@ -12,7 +12,7 @@ services:
     volumes:
       - ./config/nginx/prod:/etc/nginx/conf.d
       - ./data:/data
-      - ./config/certbot:/etc/letsencrypt/live/dcardenas.com
+      #- ./config/certbot:/etc/letsencrypt/live/dcardenas.com
       - dcardenascom-web:/var/www/dcardenascom-web
     container_name: dcardenascom-nginx
     logging:
