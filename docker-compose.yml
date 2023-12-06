@@ -11,7 +11,7 @@ services:
       - 443:443
     volumes:
       - ./config/nginx/prod:/etc/nginx/conf.d
-      - ./data:/data
+      - ./data:/home/data
       - ./config/certbot:/etc/letsencrypt/live/dcardenas.com
       - dcardenascom-web:/var/www/dcardenascom-web
     container_name: dcardenascom-nginx
