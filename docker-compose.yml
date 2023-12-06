@@ -11,6 +11,7 @@ services:
       - 443:443
     volumes:
       - ./config/nginx/prod:/etc/nginx/conf.d
+      - ./data:/data
       - dcardenascom-web:/var/www/dcardenascom-web
     container_name: dcardenascom-nginx
     logging:
